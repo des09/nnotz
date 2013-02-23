@@ -1,0 +1,21 @@
+{
+  "formatter": {
+    "js": {
+      "indent_size": 2,
+      "indent_char": " "
+    }
+  },
+  "ui": {
+    "font":"Ubuntu Mono",
+    "font_size":16,
+    "navigator": true
+  },
+  "jshint": {
+        "options": {
+            "browser": false
+        },
+        "global": [
+            "require","console"
+        ]
+    }
+}
