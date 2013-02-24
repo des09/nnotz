@@ -1,0 +1,10 @@
+extends clayout
+
+block content
+  h1= title
+  - if (user)
+    p Welcome #{user.displayName}
+    p Proceed to 
+      a(href="/nnotz.html") notz app.
+  - else
+    a(href="/auth/google") Sign in with Google
