@@ -15,7 +15,7 @@
             "browser": false
         },
         "global": [
-            "require","console","__dirname"
+            "require","console","__dirname", "module"
         ]
     }
 }

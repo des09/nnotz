@@ -6,9 +6,9 @@ var express = require('express'),
   http = require('http'),
   path = require('path'),
   util = require('util'),
-  passport = require('passport'),
-  GoogleStrategy = require('passport-google').Strategy,
-  Users = require('./dao/Users');
+  auth = require('./lib/auth'),
+  url = require('url'),
+  Users = require('./lib/dao/Users');
 
 var app = express();
 
@@ -22,55 +22,27 @@ app.configure(function() {
   app.use(express.cookieParser());
   app.use(express.bodyParser());
   app.use(express.session({
-    secret: 'keyboard cat'
+    secret: 'grool'
   }));
-  app.use(passport.initialize());
-  app.use(passport.session());
+
+  auth.configure(app, {
+    returnURL: 'http://localhost:' + app.get('port') + '/auth/google/return',
+    realm: 'http://localhost:' + app.get('port') + '/'
+  }, Users);
+
   app.use(express.methodOverride());
   app.use(app.router);
   app.use(express.static(path.join(__dirname, 'web')));
 });
 
-passport.serializeUser(function(user, done) {
-  done(null, user.id);
+app.use(function(err, req, res, next) {
+  console.error(err.stack);
+  res.send(500, 'Something broke!');
 });
-
-passport.deserializeUser(function(id, done) {
-  Users.getById(id, done);
-});
-
-passport.use(new GoogleStrategy({
-  returnURL: 'http://localhost:' + app.get('port') + '/auth/google/return',
-  realm: 'http://localhost:' + app.get('port') + '/'
-},
-
-function(identifier, profile, done) {
-  console.log("IDENTIFIER: " + util.inspect(identifier));
-  console.log("PROFILE: " + util.inspect(profile));
-  var user = {
-    id: identifier,
-    displayName: profile.displayName
-  };
-  Users.addOrUpdate(user, done);
-}));
 
 app.configure('development', function() {
   app.use(express.errorHandler());
 });
-
-// Redirect the user to Google for authentication.  When complete, Google
-// will redirect the user back to the application at
-//     /auth/google/return
-app.get('/auth/google', passport.authenticate('google'));
-
-// Google will redirect the user to this URL after authentication.  Finish
-// the process by verifying the assertion.  If valid, the user will be
-// logged in.  Otherwise, authentication has failed.
-app.get('/auth/google/return',
-passport.authenticate('google', {
-  successRedirect: '/',
-  failureRedirect: '/login'
-}));
 
 app.get('/', function(req, res) {
   console.log(util.inspect(req.user));
@@ -101,7 +73,7 @@ app.get('/appcache.mf', function(req, res) {
     'Content-Type': 'text/cache-manifest'
   });
   res.write('CACHE MANIFEST\n');
-  res.write('# rev 1\n');
+  res.write('# rev 2\n');
   res.write('CACHE:\n');
   res.write('nnotz.html\n');
   res.end();
