@@ -1,14 +1,12 @@
-/**
- * Module dependencies.
- */
-/*global process*/
 var express = require('express'),
   http = require('http'),
   path = require('path'),
   util = require('util'),
-  auth = require('./lib/auth'),
   url = require('url'),
-  Users = require('./lib/dao/Users');
+  auth = require('./lib/auth'),
+  Users = require('./lib/dao/Users'),
+  swagger = require('./lib/swagger'),
+  rest_server = require('./lib/rest/server');
 
 var app = express();
 
@@ -26,15 +24,21 @@ app.configure(function() {
   }));
 
   auth.configure(app, {
-    returnURL: 'http://localhost:' + app.get('port') + '/auth/google/return',
     realm: 'http://localhost:' + app.get('port') + '/'
   }, Users);
 
+
   app.use(express.methodOverride());
   app.use(app.router);
+
   app.use(express.static(path.join(__dirname, 'web')));
 });
 
+  swagger.configure(app);
+  swagger.addGet(rest_server.status);
+  swagger.start();
+  
+  
 app.use(function(err, req, res, next) {
   console.error(err.stack);
   res.send(500, 'Something broke!');
@@ -73,9 +77,10 @@ app.get('/appcache.mf', function(req, res) {
     'Content-Type': 'text/cache-manifest'
   });
   res.write('CACHE MANIFEST\n');
-  res.write('# rev 2\n');
+  res.write('# rev 5\n');
   res.write('CACHE:\n');
   res.write('nnotz.html\n');
+  res.write('css/style.css\n');
   res.end();
 });
 

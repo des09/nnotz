@@ -15,7 +15,7 @@
             "browser": false
         },
         "global": [
-            "require","console","__dirname", "module"
+            "require","console","__dirname", "module", "exports", "process"
         ]
     }
 }
