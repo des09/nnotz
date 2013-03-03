@@ -9,8 +9,10 @@ and an html frontend that supports google+ login, creating a todo-list, and shar
 
 Currently you can:
 
-> clone, 
+> clone,
+>
 > npm install
+>
 > node app
 
 Then browse to http://localhost:3001/ to see the google+ login, or browse to http://localhost:3001/docs to see the REST api.
