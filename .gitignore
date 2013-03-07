@@ -1,1 +1,5 @@
+coverage
 node_modules
+node_modules_*
+npm-shrinkwrap.json
+test/nooptest.js

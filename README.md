@@ -7,11 +7,12 @@ Open Source Notes App
 A simple notes app. First goal is to have a running RESTfull server API, 
 and an html frontend that supports google+ login, creating a todo-list, and sharing it.
 
-Currently you can:
+If you get a git clone, and have mongodb running at localhost:27017,
+currently you can:
 
-> clone,
->
 > npm install
+>
+> npm test --coverage
 >
 > node app
 

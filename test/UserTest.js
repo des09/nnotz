@@ -11,26 +11,41 @@ var user = {
   created: new Date().getTime()
 };
 
-datasource.getConnection('usertest', function(err, col) {
-  Users.setCollection(col);
-  
-  Users.insert(user, function(err, res) {
-    console.log(err ? err : util.inspect(user));
-      Users.findBy('googleId', user.googleId , function(err, res) {
-        console.log('here googleId ' + err + " " + util.inspect(res));
-      });
-      
-      Users.getById(user.id , function(err, res) {
-        console.log('here id ' + err + " " + util.inspect(res));
-      });
-      
-      Users.findBy('googleId', 'xyz' , function(err, res) {
-        console.log('here xyz ' + err + " " + util.inspect(res));
-      });
-      
-      setTimeout(function(){        datasource.close();},2000);
-  });
 
+
+describe('Users', function() {
+  describe('#insert()', function() {
+    it('should insert without error', function(done) {
+      datasource.getConnection('usertest', function(err, col) {
+        Users.setCollection(col);
+
+        Users.insert(user, function(err, res) {
+          if (err) throw err;
+
+          Users.findBy('googleId', user.googleId, function(err, res) {
+            if (err) throw err;
+            //assert something
+          });
+
+          Users.getById(user.id, function(err, res) {
+            if (err) throw err;
+            //assert something
+          });
+
+          Users.findBy('googleId', 'xyz', function(err, res) {
+            if (err) throw err;
+            //assert something
+          });
+
+          setTimeout(function() {
+            datasource.close();
+          }, 200);
+
+          done();
+        });
+      });
+    });
+  });
 
 
 });

@@ -3,7 +3,8 @@
   "version": "0.0.3",
   "private": true,
   "scripts": {
-    "start": "node app"
+    "start": "node app",
+    "test": "istanbul test test.js"
   },
   "dependencies": {
     "connect": "2.7.x",
@@ -13,7 +14,12 @@
     "passport": "0.1.x",
     "passport-google": "0.3.x",
     "passport-openid": "0.3.1",
-    "swagger-node-express": "1.2.x"
+    "swagger-node-express": "1.2.x",
+    "mongodb":"1.2.x"
+  },
+  "devDependencies": {
+    "istanbul": "0.1.x",
+    "mocha":"1.8.x"
   },
   "engine": "node >= 0.8.18"
 }
