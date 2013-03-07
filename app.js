@@ -4,11 +4,16 @@ var express = require('express'),
   util = require('util'),
   url = require('url'),
   auth = require('./lib/auth'),
+  datasource = require('./lib/datasource'),
   Users = require('./lib/dao/Users'),
   swagger = require('./lib/swagger'),
   rest_server = require('./lib/rest/server');
 
 var app = express();
+
+datasource.getConnection('users', function(err,res){
+  Users.setCollection(res);
+});
 
 app.configure(function() {
   app.set('port', process.env.PORT || 3001);
@@ -72,17 +77,17 @@ app.get('/nnotz.html', function(req, res) {
   });
 });
 
-app.get('/appcache.mf', function(req, res) {
-  res.writeHead(200, {
-    'Content-Type': 'text/cache-manifest'
-  });
-  res.write('CACHE MANIFEST\n');
-  res.write('# rev 5\n');
-  res.write('CACHE:\n');
-  res.write('nnotz.html\n');
-  res.write('css/style.css\n');
-  res.end();
-});
+//app.get('/appcache.mf', function(req, res) {
+//  res.writeHead(200, {
+//    'Content-Type': 'text/cache-manifest'
+//  });
+//  res.write('CACHE MANIFEST\n');
+//  res.write('# rev 5\n');
+//  res.write('CACHE:\n');
+//  res.write('nnotz.html\n');
+//  res.write('css/style.css\n');
+//  res.end();
+//});
 
 http.createServer(app).listen(app.get('port'), function() {
   console.log("Express server listening on port " + app.get('port'));
