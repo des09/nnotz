@@ -77,17 +77,17 @@ app.get('/nnotz.html', function(req, res) {
   });
 });
 
-//app.get('/appcache.mf', function(req, res) {
-//  res.writeHead(200, {
-//    'Content-Type': 'text/cache-manifest'
-//  });
-//  res.write('CACHE MANIFEST\n');
-//  res.write('# rev 5\n');
-//  res.write('CACHE:\n');
-//  res.write('nnotz.html\n');
-//  res.write('css/style.css\n');
-//  res.end();
-//});
+app.get('/appcache.mf', function(req, res) {
+  res.writeHead(200, {
+    'Content-Type': 'text/cache-manifest'
+  });
+  res.write('CACHE MANIFEST\n');
+  res.write('# rev 6\n');
+  res.write('CACHE:\n');
+  res.write('nnotz.html\n');
+  res.write('css/style.css\n');
+  res.end();
+});
 
 http.createServer(app).listen(app.get('port'), function() {
   console.log("Express server listening on port " + app.get('port'));
