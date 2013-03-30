@@ -1,7 +1,8 @@
-var util = require('util'),assert= require('assert'),
+var util = require('util'),
+  assert = require('assert'),
   datasource = require('./../lib/datasource'),
-  Users = require('./../lib/dao/Users.js');
-
+  UserDao = require('./../lib/dao/Users.js').Users,
+  Dao = require('./../lib/dao/Dao.js').Dao;
 
 
 var user = {
@@ -10,46 +11,50 @@ var user = {
   email: 'des',
   created: new Date().getTime()
 };
- console.log('assert is a ' + typeof assert);
 
+var users = new UserDao('usertest');
 
-describe('Users', function() {
-  describe('#insert()', function() {
-    it('should insert without error', function(done) {
-      datasource.getConnection('usertest', function(err, col) {
-        Users.setCollection(col);
-
-        Users.insert(user, function(err, res) {
-          if (err) throw err;
-
-          Users.findBy('googleId', user.googleId, function(err, res) {
-            if (err) throw err;
-            assert(res,'expect a user');
-            assert.equal(res.displayName,'des','user displayName');
-            assert.equal(res.email,'des','user email');
-          });
-
-          Users.getById(user.id, function(err, res) {
-            if (err) throw err;
-            assert(res,'expect a user');
-            assert.equal(res.displayName,'des','user displayName');
-            assert.equal(res.email,'des','user email');
-          });
-
-          Users.findBy('googleId', 'xyz', function(err, res) {
-            if (err) throw err;
-            assert.equal(res ,null,'expect no user');
-          });
-
-          setTimeout(function() {
-            datasource.close();
-          }, 200);
-
-          done();
-        });
-      });
+describe('users', function() {
+  describe('-basic functions', function() {
+    it('should inherit from Dao', function(done) {
+      assert(users instanceof Dao);
+      done();
     });
   });
 
+  describe('#insert()', function() {
+    it('should insert without error', function(done) {
+
+      users.insert(user, function(err, res) {
+        if (err) throw err;
+
+        users.findBy('googleId', user.googleId, function(err, res) {
+          if (err) throw err;
+          assert(res, 'expect a user');
+          assert.equal(res.displayName, 'des', 'user displayName');
+          assert.equal(res.email, 'des', 'user email');
+        });
+
+        users.getById(user.id, function(err, res) {
+          if (err) throw err;
+          assert(res, 'expect a user');
+          assert.equal(res.displayName, 'des', 'user displayName');
+          assert.equal(res.email, 'des', 'user email');
+        });
+
+        users.findBy('googleId', 'xyz', function(err, res) {
+          if (err) throw err;
+          assert.equal(res, null, 'expect no user');
+        });
+
+        setTimeout(function() {
+          datasource.close();
+        }, 200);
+
+        done();
+      });
+
+    });
+  });
 
 });

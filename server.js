@@ -5,22 +5,19 @@ var express = require('express'),
   url = require('url'),
   auth = require('./lib/auth'),
   datasource = require('./lib/datasource'),
-  Users = require('./lib/dao/Users'),
-  Notes = require('./lib/dao/Notes'),
+  UserDao = require('./lib/dao/Users').Users,
+  NoteDao = require('./lib/dao/Notes').Notes,
   swagger = require('./lib/swagger'),
   rest_server = require('./lib/rest/server');
 
 var app = express();
 var port = process.env.PORT || 3001;
-//realm is something I made up.
-app.set('realm', process.env.REALM || 'http://localhost:' + port + '/');
+var Users = new UserDao('users');
+var Notes = new NoteDao('notes');
 
-datasource.getConnection('users', function(err,res){
-  Users.setCollection(res);
-});
-datasource.getConnection('notes', function(err,res){
-  Notes.setCollection(res);
-});
+// realm is something I made up for configuring passport and swagger
+// set it as an environment variable.
+app.set('realm', process.env.REALM || 'http://localhost:' + port + '/');
 
 rest_server.setNotes(Notes);
 
