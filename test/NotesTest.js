@@ -19,11 +19,28 @@ describe('Notes', function() {
       Notes.insert(note, function(err, res) {
         if (err) throw err;
 
+        Notes.getById(note.id, function(err, res) {
+          if (err) throw err;
+          assert.equal(note.text, res.text, 'can get note by id. ' + util.inspect(res));
+        });
+
         Notes.findBy('type', note.type, 10, 0, function(err, res) {
           if (err) throw err;
           assert(res, 'expect a result');
           assert(res[0], 'expect an array');
           assert.equal(res[0].text, 'des', 'note text set');
+        });
+
+        Notes.deleteById(note.id, function(err, res) {
+          if (err) throw err;
+          Notes.getById(note.id, function(err, res) {
+            if (err) throw err;
+            assert.equal(null, res, 'deleted note should not be found.');
+          });
+        });
+
+        Notes.deleteById('515842187e00ecbb69000001', function(err, res) {
+          if (err) throw err;
         });
 
         done();

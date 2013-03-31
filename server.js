@@ -49,6 +49,7 @@ app.configure(function() {
   swagger.addGet(rest_server.status);
   swagger.addGet(rest_server.listNotes);
   swagger.addPost(rest_server.addNote);
+  swagger.addDelete(rest_server.deleteNote);
   swagger.start(app);
   
   
